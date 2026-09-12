@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DockAmall</title>
+<meta name="description" content="Computational drug discovery services — molecular docking, virtual screening, MD simulation and ML-driven hit finding by Kamaldeep Kaur, PhD (Bioinformatics).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --ink:#0C1219;
+  --panel:#131C26;
+  --panel-2:#18232F;
+  --line:#243140;
+  --line-soft:#1B2733;
+  --text:#E6EBF0;
+  --muted:#93A2B1;
+  --dim:#6C7E8E;
+  --amber:#E3A15A;
+  --amber-dim:#B07C40;
+  --amber-wash:rgba(227,161,90,.10);
+  --crimson:#C8664B;
+  --teal:#6FB3A8;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --gutter:clamp(20px,5vw,72px);
+  --maxw:1180px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--text);
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ---------- header ---------- */
+.masthead{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,18,25,.86);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line-soft);
+}
+.masthead-in{
+  display:flex;align-items:center;gap:20px;
+  min-height:62px;flex-wrap:wrap;
+  padding-block:10px;
+}
+.brand{
+  font-family:var(--display);
+  font-size:1.3rem;
+  letter-spacing:-.01em;
+  text-decoration:none;
+  margin-right:auto;
+  display:flex;align-items:center;gap:9px;
+  font-weight:600;color:var(--text);
+}
+.brand::before{
+  content:"";width:7px;height:7px;flex:none;
+  background:var(--amber);transform:rotate(45deg);
+}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{
+  font-size:.8125rem;text-decoration:none;color:var(--muted);
+  padding-block:4px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav a:hover{color:var(--text);border-bottom-color:var(--amber)}
+
+.fx{
+  display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden;
+}
+.fx button{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;
+  background:transparent;color:var(--dim);border:0;cursor:pointer;
+  padding:6px 10px;transition:background .16s,color .16s;
+}
+.fx button + button{border-left:1px solid var(--line)}
+.fx button:hover{color:var(--text)}
+.fx button[aria-pressed="true"]{background:var(--amber-wash);color:var(--amber)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line-soft)}
+#lattice{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;opacity:.5;
+}
+.hero-in{position:relative;padding-block:clamp(56px,9vw,104px) clamp(48px,7vw,84px)}
+.status{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal);border:1px solid rgba(111,179,168,.3);
+  border-radius:999px;padding:5px 13px;margin-bottom:26px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none}
+h1{
+  font-family:var(--display);
+  font-size:clamp(2.4rem,6.2vw,4rem);
+  line-height:1.04;
+  letter-spacing:-.022em;
+  font-weight:300;
+  max-width:17ch;
+}
+h1 em{font-style:normal;color:var(--amber);font-weight:400}
+.lede{
+  margin-top:24px;max-width:56ch;
+  font-size:clamp(1rem,1.6vw,1.125rem);
+  color:var(--muted);line-height:1.7;
+}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.btn{
+  font-family:var(--sans);font-size:.875rem;font-weight:500;letter-spacing:.01em;
+  padding:13px 24px;border-radius:2px;text-decoration:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:9px;border:1px solid transparent;
+  transition:background .18s,border-color .18s,color .18s,transform .18s;
+}
+.btn-primary{background:var(--amber);color:#16202B;font-weight:600}
+.btn-primary:hover{background:#F0B571;transform:translateY(-1px)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+
+.creds{
+  display:flex;flex-wrap:wrap;gap:0 34px;row-gap:14px;
+  margin-top:52px;padding-top:26px;border-top:1px solid var(--line-soft);
+}
+.cred{display:flex;flex-direction:column;gap:3px}
+.cred b{font-family:var(--mono);font-size:.9375rem;font-weight:500;color:var(--text)}
+.cred span{font-size:.75rem;color:var(--dim);letter-spacing:.02em}
+
+/* ---------- section frame ---------- */
+section{border-bottom:1px solid var(--line-soft)}
+.sec{
+  display:grid;grid-template-columns:170px 1fr;gap:clamp(24px,4vw,56px);
+  padding-block:clamp(56px,7vw,88px);
+  align-items:start;
+}
+.sec-label{position:sticky;top:92px}
+.sec-label .n{
+  display:block;font-family:var(--mono);font-size:.6875rem;color:var(--amber-dim);
+  letter-spacing:.14em;margin-bottom:6px;
+}
+.sec-label h2{
+  font-family:var(--display);font-size:1.375rem;font-weight:400;
+  letter-spacing:-.01em;line-height:1.25;
+}
+.sec-body{min-width:0}
+.sec-intro{max-width:62ch;color:var(--muted);margin-bottom:36px}
+
+/* ---------- service cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.card{
+  background:var(--panel);
+  padding:26px 24px 24px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:background .2s;
+}
+.card:hover{background:var(--panel-2)}
+.card h3{
+  font-family:var(--sans);font-size:1.0625rem;font-weight:500;letter-spacing:-.005em;line-height:1.3;
+}
+.card > p{font-size:.875rem;color:var(--muted);line-height:1.62}
+.deliv{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.deliv li{
+  font-family:var(--mono);font-size:.75rem;color:var(--dim);
+  padding-left:15px;position:relative;line-height:1.5;
+}
+.deliv li::before{
+  content:"";position:absolute;left:0;top:.58em;
+  width:5px;height:1px;background:var(--amber-dim);
+}
+.card-foot{
+  margin-top:auto;padding-top:18px;border-top:1px solid var(--line-soft);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+}
+.price{
+  font-family:var(--mono);font-size:1.375rem;font-weight:500;color:var(--amber);
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2;
+}
+.price small{font-size:.75rem;color:var(--dim);font-weight:400;letter-spacing:.04em}
+.turn{font-family:var(--mono);font-size:.6875rem;color:var(--dim);text-align:right;letter-spacing:.05em;line-height:1.4}
+.tiers{
+  margin-top:auto;padding-top:18px;border-top:1px solid var(--line-soft);
+  display:flex;flex-direction:column;gap:9px;
+}
+.tier{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.tier .t{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.04em}
+.tier .price{font-size:1.125rem}
+.tiers .turn{text-align:left;padding-top:3px;border-top:1px solid var(--line-soft);margin-top:2px}
+
+/* featured */
+.featured{
+  margin-top:1px;background:var(--panel);
+  border:1px solid var(--amber-dim);
+  padding:clamp(26px,3.5vw,38px);
+  display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(24px,4vw,44px);
+  align-items:center;
+}
+.featured .tag{
+  font-family:var(--mono);font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:12px;display:block;
+}
+.featured h3{font-family:var(--display);font-size:clamp(1.5rem,3vw,1.9rem);font-weight:400;letter-spacing:-.015em;line-height:1.18}
+.featured p{margin-top:14px;color:var(--muted);font-size:.9375rem;max-width:48ch}
+.stages{
+  display:flex;flex-wrap:wrap;gap:7px;margin-top:20px;
+}
+.stages span{
+  font-family:var(--mono);font-size:.6875rem;color:var(--muted);
+  border:1px solid var(--line);border-radius:2px;padding:4px 9px;
+}
+.featured-price{
+  border-left:1px solid var(--line);padding-left:clamp(20px,3vw,36px);
+}
+.featured-price .price{font-size:2rem}
+.featured-price p{margin-top:8px;font-size:.8125rem;color:var(--dim);max-width:30ch}
+
+.rates{
+  margin-top:26px;display:flex;flex-wrap:wrap;gap:12px 40px;
+  padding-top:22px;border-top:1px solid var(--line-soft);
+}
+.rate{display:flex;align-items:baseline;gap:10px;font-size:.875rem;color:var(--muted)}
+.rate b{font-family:var(--mono);font-weight:500;color:var(--text);font-variant-numeric:tabular-nums}
+
+/* ---------- process ---------- */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{
+  display:grid;grid-template-columns:52px 1fr;gap:20px;
+  padding-block:22px;border-top:1px solid var(--line-soft);
+}
+.step:first-child{border-top:0;padding-top:0}
+.step-n{
+  font-family:var(--mono);font-size:.8125rem;color:var(--amber);
+  letter-spacing:.08em;padding-top:2px;
+}
+.step h3{font-family:var(--sans);font-size:1rem;font-weight:500;margin-bottom:6px}
+.step p{color:var(--muted);font-size:.9375rem;max-width:60ch}
+
+/* ---------- about ---------- */
+.bio p + p{margin-top:16px}
+.bio p{color:var(--muted);max-width:62ch}
+.bio strong{color:var(--text);font-weight:500}
+.pubs{margin-top:30px;display:flex;flex-direction:column;gap:0}
+.pub{
+  padding:16px 0;border-top:1px solid var(--line-soft);
+  display:grid;grid-template-columns:60px 1fr;gap:18px;
+}
+.pub .yr{font-family:var(--mono);font-size:.75rem;color:var(--amber-dim);padding-top:3px}
+.pub h4{font-size:.9375rem;font-weight:400;line-height:1.45;max-width:56ch}
+.pub em{display:block;font-style:normal;font-size:.75rem;color:var(--dim);margin-top:5px;font-family:var(--mono)}
+.stack{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px}
+.stack span{
+  font-family:var(--mono);font-size:.6875rem;color:var(--muted);
+  background:var(--panel);border:1px solid var(--line-soft);border-radius:2px;padding:5px 10px;
+}
+
+/* ---------- training ---------- */
+.topics{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:0 clamp(24px,4vw,48px);
+}
+.topic{padding:15px 0;border-top:1px solid var(--line-soft)}
+.topic h3{font-family:var(--sans);font-size:.9375rem;font-weight:500;line-height:1.35}
+.topic p{font-size:.8125rem;color:var(--dim);margin-top:4px;line-height:1.55}
+.ask{
+  margin-top:32px;padding-top:24px;border-top:1px solid var(--line-soft);
+  display:flex;flex-wrap:wrap;align-items:center;gap:18px;
+}
+.ask p{color:var(--muted);font-size:.9375rem;max-width:46ch}
+
+/* teaser */
+.teach-teaser{
+  display:flex;flex-wrap:wrap;align-items:center;gap:clamp(20px,4vw,44px);
+  background:var(--panel);border:1px solid var(--line);
+  padding:clamp(24px,3.5vw,34px);
+}
+.teach-teaser .tt-copy{flex:1 1 300px;min-width:0}
+.teach-teaser h3{
+  font-family:var(--display);font-size:clamp(1.375rem,2.6vw,1.75rem);
+  font-weight:400;letter-spacing:-.015em;line-height:1.2;
+}
+.teach-teaser p{margin-top:12px;color:var(--muted);font-size:.9375rem;max-width:50ch}
+.tt-side{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.tt-rate{display:flex;flex-direction:column;gap:2px}
+.tt-rate .price{font-size:1.5rem}
+.tt-rate span{font-family:var(--mono);font-size:.6875rem;color:var(--dim);letter-spacing:.06em}
+
+/* ---------- training portal ---------- */
+dialog#portal{
+  border:0;padding:0;background:transparent;color:var(--text);
+  max-width:none;max-height:none;width:100%;height:100%;
+  overflow:visible;
+}
+dialog#portal::backdrop{background:rgba(6,10,14,.8)}
+.portal-shell{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(12px,3vw,36px);
+}
+.portal-panel{
+  position:relative;
+  background:var(--ink);border:1px solid var(--line);
+  width:min(940px,100%);max-height:100%;overflow-y:auto;
+  padding:clamp(26px,4vw,44px);
+}
+dialog#portal[open] .portal-panel{animation:rise .26s cubic-bezier(.2,.7,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.portal-close{
+  position:absolute;top:14px;right:14px;z-index:2;
+  width:34px;height:34px;line-height:1;
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  color:var(--muted);font-size:1.1rem;cursor:pointer;
+  transition:color .16s,border-color .16s;
+}
+.portal-close:hover{color:var(--amber);border-color:var(--amber)}
+.portal-panel > .label{display:block;margin-bottom:10px}
+.portal-panel h2{
+  font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.1rem);
+  font-weight:400;letter-spacing:-.018em;line-height:1.15;max-width:20ch;
+}
+.portal-lede{margin-top:14px;color:var(--muted);font-size:.9375rem;max-width:60ch}
+.portal-rates{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
+  background:var(--line-soft);border:1px solid var(--line-soft);margin:26px 0 8px;
+}
+.prate{background:var(--panel);padding:18px 20px;display:flex;flex-direction:column;gap:5px}
+.prate .k{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.prate .price{font-size:1.375rem}
+.prate small{font-size:.75rem;color:var(--dim)}
+.portal-note{font-size:.8125rem;color:var(--dim);margin-bottom:26px}
+
+/* ---------- faq ---------- */
+.faq{display:flex;flex-direction:column}
+details{border-top:1px solid var(--line-soft);padding-block:4px}
+details:first-of-type{border-top:0}
+summary{
+  cursor:pointer;list-style:none;padding-block:16px;
+  font-size:.9375rem;font-weight:400;color:var(--text);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{
+  content:"+";font-family:var(--mono);color:var(--amber);font-size:1rem;flex:none;transition:transform .2s;
+}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--muted);font-size:.9375rem;padding-bottom:18px;max-width:62ch}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,48px);align-items:start}
+form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+input,select,textarea{
+  font-family:var(--sans);font-size:.9375rem;font-weight:300;color:var(--text);
+  background:var(--panel);border:1px solid var(--line);border-radius:2px;
+  padding:11px 13px;width:100%;
+}
+textarea{resize:vertical;min-height:104px;line-height:1.6}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:transparent}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.contact-aside p{color:var(--muted);font-size:.9375rem;max-width:44ch}
+.direct{margin-top:26px;display:flex;flex-direction:column;gap:0}
+.direct a,.direct div{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0;border-top:1px solid var(--line-soft);
+  text-decoration:none;font-size:.875rem;color:var(--text);transition:color .16s;
+}
+.direct a:hover{color:var(--amber)}
+.direct .k{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);width:76px;flex:none}
+.note{
+  margin-top:26px;padding:16px 18px;background:var(--amber-wash);
+  border-left:2px solid var(--amber-dim);font-size:.8125rem;color:var(--muted);
+}
+
+/* ---------- footer ---------- */
+footer{padding-block:34px;font-size:.8125rem;color:var(--dim)}
+.foot-in{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.foot-in a{color:var(--muted);text-decoration:none}
+.foot-in a:hover{color:var(--amber)}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .sec{grid-template-columns:1fr;gap:22px}
+  .sec-label{position:static;display:flex;align-items:baseline;gap:12px}
+  .sec-label .n{margin-bottom:0}
+  .featured{grid-template-columns:1fr}
+  .featured-price{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:22px}
+  .contact-grid{grid-template-columns:1fr}
+  .nav{display:none}
+}
+@media (max-width:560px){
+  .two{grid-template-columns:1fr}
+  .creds{gap:0 24px}
+  .brand{font-size:1.15rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <a class="brand" href="#top">DockAmall</a>
+    <nav class="nav">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="#training">Training</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="fx" role="group" aria-label="Display prices in">
+      <button type="button" id="cur-usd" data-cur="usd" aria-pressed="true">USD</button>
+      <button type="button" id="cur-eur" data-cur="eur" aria-pressed="false">EUR</button>
+      <button type="button" id="cur-inr" data-cur="inr" aria-pressed="false">INR</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="lattice" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <span class="status"><span class="dot"></span>Taking projects for Q4 2026</span>
+    <h1>Structure-based drug discovery, run <em>end to end</em> — without hiring a computational team.</h1>
+    <p class="lede">I'm Kamaldeep Kaur, a PhD bioinformatician. I take your target from a raw PDB structure to a ranked, ADMET-filtered, dynamics-validated shortlist of candidates — with the figures and methods section your paper or grant report needs.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#contact">Book a free 20-min scoping call</a>
+      <a class="btn btn-ghost" href="#services">See services &amp; pricing</a>
+    </div>
+    <div class="creds">
+      <div class="cred"><b>PhD</b><span>Bioinformatics, in progress</span></div>
+      <div class="cred"><b>2</b><span>Peer-reviewed publications</span></div>
+      <div class="cred"><b>100k+</b><span>Compounds screened per run</span></div>
+      <div class="cred"><b>100&ndash;500 ns</b><span>MD trajectories, GPU-accelerated</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">01</span>
+      <h2>Services<br>&amp; pricing</h2>
+    </div>
+    <div class="sec-body">
+      <p class="sec-intro">Fixed-scope packages, fixed prices, no hourly surprises. Every project ships with a written report, publication-ready figures, and all raw output files so your results stay reproducible and reviewable. Prices exclude compute for unusually large jobs, which I'll quote up front. <b style="color:var(--text);font-weight:400">Switch the currency in the header</b> &mdash; INR figures are a reduced rate for Indian academic institutions and students, not a conversion.</p>
+
+      <div class="grid">
+
+        <article class="card">
+          <h3>Target preparation &amp; binding-site assessment</h3>
+          <p>Structure cleanup and a candid verdict on whether your target is actually druggable before you spend money on screening.</p>
+          <ul class="deliv">
+            <li>Protonation, missing loops, cofactors</li>
+            <li>Cavity detection &amp; volume</li>
+            <li>Key residue interaction map</li>
+            <li>Druggability assessment memo</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="90" data-eur="85" data-inr="2,500">$90</span>
+            <span class="turn">2&ndash;3 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Quick docking &mdash; small set</h3>
+          <p>A first, low-commitment job: a handful of compounds against one target, done properly rather than cheaply.</p>
+          <ul class="deliv">
+            <li>Up to 10 ligands, one target</li>
+            <li>Binding affinities in kcal/mol</li>
+            <li>Interaction diagram per hit</li>
+            <li>Short summary report</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="45" data-eur="40" data-inr="1,200">$45</span>
+            <span class="turn">2&ndash;3 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Molecular docking</h3>
+          <p>Focused docking of a defined compound set, with binding poses you can actually defend to a reviewer.</p>
+          <ul class="deliv">
+            <li>Up to 100 ligands</li>
+            <li>Binding affinities in kcal/mol</li>
+            <li>2D + 3D interaction diagrams</li>
+            <li>Ranked results table (CSV)</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="250" data-eur="230" data-inr="6,500">$250</span>
+            <span class="turn">4&ndash;6 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Virtual screening</h3>
+          <p>Large-library screening funnelled down to a shortlist worth ordering, with every filter step documented.</p>
+          <ul class="deliv">
+            <li>10k&ndash;100k compound libraries</li>
+            <li>Multi-stage filtering funnel</li>
+            <li>Top 50 hits, fully annotated</li>
+            <li>Chemical diversity analysis</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="600" data-eur="550" data-inr="16,000">$600</span>
+            <span class="turn">10&ndash;14 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Pharmacophore modelling &amp; screening</h3>
+          <p>Feature-based models built from known actives, then used as a fast filter across commercial libraries.</p>
+          <ul class="deliv">
+            <li>Ligand- or structure-based model</li>
+            <li>Validation against decoy sets</li>
+            <li>Screening hits with fit scores</li>
+            <li>Model files for reuse</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="400" data-eur="370" data-inr="9,000">$400</span>
+            <span class="turn">7&ndash;10 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Molecular dynamics simulation</h3>
+          <p>The evidence that a docked pose actually holds up. Explicit-solvent simulation with full stability analysis. Priced per complex.</p>
+          <ul class="deliv">
+            <li>One protein&ndash;ligand complex per run</li>
+            <li>RMSD, RMSF, Rg, SASA, H-bonds</li>
+            <li>MM-PBSA binding free energy</li>
+            <li>Trajectory files + plots</li>
+          </ul>
+          <div class="tiers">
+            <div class="tier">
+              <span class="t">100 ns</span>
+              <span class="price" data-usd="650" data-eur="600" data-inr="6,000">$650</span>
+            </div>
+            <div class="tier">
+              <span class="t">500 ns</span>
+              <span class="price" data-usd="1,400" data-eur="1,290" data-inr="10,000">$1,400</span>
+            </div>
+            <span class="turn">10&ndash;14 days &middot; 3 weeks for 500 ns</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>ADMET &amp; drug-likeness profiling</h3>
+          <p>Pharmacokinetics and toxicity risk for your candidate set, so you drop the doomed molecules early.</p>
+          <ul class="deliv">
+            <li>Absorption, distribution, metabolism</li>
+            <li>Toxicity &amp; mutagenicity alerts</li>
+            <li>Lipinski, Veber, PAINS filters</li>
+            <li>Comparison matrix (XLSX)</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="120" data-eur="110" data-inr="3,000">$120</span>
+            <span class="turn">2&ndash;4 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Machine learning &amp; QSAR</h3>
+          <p>A predictive model trained on your bioactivity data, delivered as a working script you can keep running.</p>
+          <ul class="deliv">
+            <li>Descriptor &amp; fingerprint engineering</li>
+            <li>Model selection + cross-validation</li>
+            <li>Performance report with metrics</li>
+            <li>Documented Python notebook</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="800" data-eur="740" data-inr="22,000">$800</span>
+            <span class="turn">14&ndash;18 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Manuscript figures &amp; methods</h3>
+          <p>You have the results but not the time. I turn existing computational data into publication-grade figures and a defensible methods section.</p>
+          <ul class="deliv">
+            <li>Up to 5 figures, 300 dpi, journal-formatted</li>
+            <li>Methods text with software versions</li>
+            <li>Supplementary data tables</li>
+            <li>One revision round included</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="220" data-eur="200" data-inr="5,000">$220</span>
+            <span class="turn">5&ndash;7 days</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Project report &amp; manuscript preparation</h3>
+          <p>Your computational work written up properly &mdash; structured, referenced and ready for submission or for your supervisor. Authorship or acknowledgement is agreed in writing before I start.</p>
+          <ul class="deliv">
+            <li>Full write-up from your results</li>
+            <li>Introduction, methods, results narrative</li>
+            <li>Reference list, formatted to journal</li>
+            <li>Two revision rounds included</li>
+          </ul>
+          <div class="card-foot">
+            <span class="price" data-usd="450" data-eur="415" data-inr="12,000">$450</span>
+            <span class="turn">10&ndash;12 days</span>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="featured">
+        <div>
+          <span class="tag">Complete programme</span>
+          <h3>Target to validated leads</h3>
+          <p>The full pipeline as one engagement, priced well below the sum of its parts. Best for a lab or early-stage company starting from a target with no computational work done yet.</p>
+          <div class="stages">
+            <span>Target prep</span><span>Library curation</span><span>Virtual screening</span><span>Docking refinement</span><span>ADMET filtering</span><span>MD validation</span><span>MM-PBSA</span><span>Final report</span>
+          </div>
+        </div>
+        <div class="featured-price">
+          <span class="price" data-usd="2,800" data-eur="2,580" data-inr="75,000">$2,800</span>
+          <p>From &mdash; 6 to 8 weeks. Final quote depends on library size and number of systems simulated.</p>
+        </div>
+      </div>
+
+      <div class="rates">
+        <span class="rate">Consultation &amp; troubleshooting <b class="price" data-usd="40/hr" data-eur="37/hr" data-inr="1,500/hr">$40/hr</b></span>
+        <span class="rate">Scoping call <b>Free, 20 min</b></span>
+        <span class="rate">Payment <b>50% up front, 50% on delivery</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">02</span>
+      <h2>How a project runs</h2>
+    </div>
+    <div class="sec-body">
+      <p class="sec-intro">Four stages, in this order, every time. You know what you're getting before any money changes hands.</p>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">01</span>
+          <div>
+            <h3>Scoping call</h3>
+            <p>Twenty minutes, free, no obligation. We go through your target, what you already have, and what a useful answer would look like. If computational work isn't the right spend for you right now, I'll say so.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">02</span>
+          <div>
+            <h3>Written proposal</h3>
+            <p>You get scope, methods, deliverables, timeline and a fixed price in writing, plus an NDA if you want one. Nothing starts until you approve it and the deposit clears.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">03</span>
+          <div>
+            <h3>Execution with checkpoints</h3>
+            <p>I run the pipeline and send a short progress update at each milestone &mdash; not silence for three weeks followed by a surprise. If early results suggest a change of direction, you hear it immediately.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">04</span>
+          <div>
+            <h3>Delivery and handover</h3>
+            <p>Full report, figures, raw output files and scripts. Then a walkthrough call so you can explain the work yourself &mdash; to a supervisor, a reviewer, or an investor. One revision round is included.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">03</span>
+      <h2>Who you're working with</h2>
+    </div>
+    <div class="sec-body bio">
+      <p><strong>Kamaldeep Kaur</strong> &mdash; PhD candidate in Bioinformatics at Lovely Professional University, Jalandhar, with an M.Sc. in Biotechnology and a B.Sc. (Hons.) in Bioinformatics. I build and run computational pipelines for structure-based drug discovery, and I've published the results of doing exactly that.</p>
+      <p>My work spans molecular docking, molecular dynamics, pharmacophore screening, machine learning for compound prioritisation, and network pharmacology. Most recently I ran a full virtual screening and molecular modelling campaign against HIV targets, from library preparation through to dynamics validation.</p>
+      <p>You're hiring one person, not an agency, which means you talk directly to whoever is doing the work &mdash; and the methods section will be written by someone who can defend it.</p>
+
+      <div class="pubs">
+        <div class="pub">
+          <span class="yr">2026</span>
+          <div>
+            <h4>Identification of Potential HIV Inhibitors Using Virtual Screening and Molecular Modeling Approaches</h4>
+            <em>International Journal of Drug Delivery Technology, 16(6s), 506&ndash;528</em>
+          </div>
+        </div>
+        <div class="pub">
+          <span class="yr">M.Sc.</span>
+          <div>
+            <h4>Genome Annotation of Uncharacterized Proteins in <i>Neisseria meningitidis</i> K1207</h4>
+            <em>Journal of Advanced Scientific Research</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <span>AutoDock Vina</span><span>AutoDock</span><span>GROMACS</span><span>Pharmit</span><span>SwissADME</span><span>OSIRIS</span><span>scikit-learn</span><span>XGBoost</span><span>Python</span><span>Linux / Bash</span><span>CUDA GPU</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING -->
+<section id="training">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">04</span>
+      <h2>Training, when I have time</h2>
+    </div>
+    <div class="sec-body">
+      <div class="teach-teaser">
+        <div class="tt-copy">
+          <h3>Or learn to do it yourself</h3>
+          <p>I teach these methods one-to-one and to small groups when my schedule allows &mdash; hands-on, on your own target, not slides. Nine topics, from docking to GPU workflows.</p>
+        </div>
+        <div class="tt-side">
+          <div class="tt-rate">
+            <span class="price" data-usd="70/hr" data-eur="65/hr" data-inr="2,000/hr">$70/hr</span>
+            <span>One-to-one &middot; subject to availability</span>
+          </div>
+          <button class="btn btn-primary" type="button" id="open-portal">See what I can teach you</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog id="portal" aria-labelledby="portal-title">
+  <div class="portal-shell">
+    <div class="portal-panel">
+      <button class="portal-close" type="button" id="close-portal" aria-label="Close">&times;</button>
+      <span class="label">Training</span>
+      <h2 id="portal-title">What I can teach you</h2>
+      <p class="portal-lede">Live sessions, worked through on your own system rather than a toy example. It isn't a fixed course with set dates &mdash; email me with what you want to learn and I'll tell you honestly whether I have the time. Most topics need three or four sessions to reach the point where you can run things unsupervised; book four together and the fourth is half price.</p>
+
+      <div class="portal-rates">
+        <div class="prate">
+          <span class="k">One-to-one</span>
+          <span class="price" data-usd="70/hr" data-eur="65/hr" data-inr="2,000/hr">$70/hr</span>
+          <small>Two-hour sessions work best</small>
+        </div>
+        <div class="prate">
+          <span class="k">Small group, 2&ndash;5 people</span>
+          <span class="price" data-usd="45/hr" data-eur="40/hr" data-inr="1,200/hr">$45/hr</span>
+          <small>Per person, per hour</small>
+        </div>
+        <div class="prate">
+          <span class="k">Lab or department</span>
+          <span class="price">Ask</span>
+          <small>Half-day workshop, quoted per group</small>
+        </div>
+      </div>
+      <p class="portal-note">INR rates apply to Indian academic institutions and students. Training covers the method itself; consultation on your live project is billed separately.</p>
+
+      <div class="topics">
+        <div class="topic">
+          <h3>Molecular docking with AutoDock Vina</h3>
+          <p>Preparing receptor and ligands, grid setup, running, and reading results without over-claiming them.</p>
+        </div>
+        <div class="topic">
+          <h3>Molecular dynamics with GROMACS</h3>
+          <p>System building, solvation, equilibration, production runs, and what goes wrong at each stage.</p>
+        </div>
+        <div class="topic">
+          <h3>Trajectory analysis</h3>
+          <p>RMSD, RMSF, Rg, SASA, hydrogen bonding and MM-PBSA &mdash; and what each one can and can't tell you.</p>
+        </div>
+        <div class="topic">
+          <h3>Pharmacophore modelling</h3>
+          <p>Building models from actives, validating against decoys, and screening with Pharmit.</p>
+        </div>
+        <div class="topic">
+          <h3>Virtual screening pipelines</h3>
+          <p>Designing a multi-stage funnel that survives scrutiny, from library curation to a defensible shortlist.</p>
+        </div>
+        <div class="topic">
+          <h3>ADMET &amp; drug-likeness prediction</h3>
+          <p>SwissADME, OSIRIS, and the standard filters &mdash; plus their limitations, which matter more than people admit.</p>
+        </div>
+        <div class="topic">
+          <h3>Machine learning for compound screening</h3>
+          <p>Descriptors and fingerprints, model selection, cross-validation, and avoiding the usual overfitting traps.</p>
+        </div>
+        <div class="topic">
+          <h3>Python for cheminformatics</h3>
+          <p>Handling molecular data, computing descriptors, and producing figures you'd put in a paper.</p>
+        </div>
+        <div class="topic">
+          <h3>Linux, Bash &amp; GPU workflows</h3>
+          <p>Working comfortably on the command line and running jobs on Colab or a GPU machine.</p>
+        </div>
+      </div>
+
+      <div class="ask">
+        <a class="btn btn-primary" href="mailto:dockk0382@gmail.com?subject=Training%20enquiry">Email me about training</a>
+        <p>Tell me your background, what you want to learn, and your timeline. I'll reply either way.</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">05</span>
+      <h2>Before you ask</h2>
+    </div>
+    <div class="sec-body">
+      <div class="faq">
+        <details open>
+          <summary>Is my target and my data kept confidential?</summary>
+          <p>Yes. I sign an NDA before receiving anything sensitive, and I'm happy to use yours rather than mine. Your structures, compound sets and results are never reused, shared, or included in my own publications or portfolio without your written permission.</p>
+        </details>
+        <details>
+          <summary>Who owns the results?</summary>
+          <p>You do. All output files, scripts, figures and reports are yours outright on final payment. If the work leads to a publication, authorship or acknowledgement is whatever we agree in the proposal &mdash; some clients want me listed, some don't, both are fine.</p>
+        </details>
+        <details>
+          <summary>Will you write my thesis for me?</summary>
+          <p>No. I'll run your computations, prepare figures, and write up methods and results for a manuscript with authorship or acknowledgement agreed in advance &mdash; that's normal scientific collaboration. What I won't do is write work that gets submitted as your own unaided thesis, because that's misconduct at your institution and puts my own academic name at risk. Plenty of legitimate help sits on this side of that line.</p>
+        </details>
+        <details>
+          <summary>What if the results are negative?</summary>
+          <p>You still pay, and you still get the full report. A screening campaign that finds nothing worth pursuing is a real result that saves you months of wet-lab work &mdash; and I'll tell you honestly when that's what happened rather than dressing up weak hits.</p>
+        </details>
+        <details>
+          <summary>Can you guarantee the compounds will work experimentally?</summary>
+          <p>No, and neither can anyone else. Computational methods rank and prioritise; they don't prove activity. What I can guarantee is that the methodology is sound, the protocols are validated, and the results are reproducible from the files I give you.</p>
+        </details>
+        <details>
+          <summary>Do you work with students and small academic labs?</summary>
+          <p>Yes, and that's a large part of the work. If you're a student paying out of a limited grant, say so on the enquiry form &mdash; there's an academic rate, and I'd rather scope the project down to what you can afford than turn you away.</p>
+        </details>
+        <details>
+          <summary>How do I pay from outside India?</summary>
+          <p>International bank transfer, Wise, or PayPal, invoiced in USD or EUR. Indian clients can pay by UPI or bank transfer in INR, at the reduced institutional rate shown when you switch the currency in the header. Fifty percent up front, the balance on delivery.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap sec">
+    <div class="sec-label">
+      <span class="n">06</span>
+      <h2>Start a project</h2>
+    </div>
+    <div class="sec-body">
+      <div class="contact-grid">
+        <form action="https://formspree.io/f/mrpgdnwq" method="POST">
+          <input type="hidden" name="_subject" value="New DockAmall enquiry">
+          <div class="two">
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input id="f-name" name="name" type="text" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" required autocomplete="email">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-org">Institution or company</label>
+            <input id="f-org" name="organisation" type="text" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="f-service">Service you need</label>
+            <select id="f-service" name="service">
+              <option>Not sure yet &mdash; advise me</option>
+              <option>Target preparation &amp; binding-site assessment</option>
+              <option>Molecular docking</option>
+              <option>Virtual screening</option>
+              <option>Pharmacophore modelling &amp; screening</option>
+              <option>Molecular dynamics simulation</option>
+              <option>ADMET &amp; drug-likeness profiling</option>
+              <option>Machine learning &amp; QSAR</option>
+              <option>Manuscript figures &amp; methods</option>
+              <option>Project report &amp; manuscript preparation</option>
+              <option>Training &mdash; one-to-one or small group</option>
+              <option>Full pipeline: target to validated leads</option>
+            </select>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="f-target">Target / system</label>
+              <input id="f-target" name="target" type="text" placeholder="e.g. PDB 4PUO, EGFR kinase">
+            </div>
+            <div class="field">
+              <label for="f-timeline">Timeline</label>
+              <input id="f-timeline" name="timeline" type="text" placeholder="e.g. results needed by December">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-budget">Budget range</label>
+            <input id="f-budget" name="budget" type="text" placeholder="Optional &mdash; helps me scope realistically">
+          </div>
+          <div class="field">
+            <label for="f-msg">What are you trying to find out?</label>
+            <textarea id="f-msg" name="message" required placeholder="A few sentences on your target, what you already have, and what a useful result would look like."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Send enquiry</button>
+        </form>
+
+        <div class="contact-aside">
+          <p>Tell me what you're working on and I'll reply within two working days with either a proposal or an honest reason why I'm not the right fit.</p>
+          <div class="direct">
+            <a href="mailto:dockk0382@gmail.com"><span class="k">Email</span>dockk0382@gmail.com</a>
+            <a href="https://www.linkedin.com/in/kamaldeep-kaur-sidhu-3279882a7" target="_blank" rel="noopener"><span class="k">LinkedIn</span>Kamaldeep Kaur Sidhu</a>
+            <a href="https://scholar.google.com/citations?user=s1UB_-YAAAAJ" target="_blank" rel="noopener"><span class="k">Scholar</span>Publication record</a>
+            <a href="https://dockamall.github.io" target="_blank" rel="noopener"><span class="k">Portfolio</span>dockamall.github.io</a>
+            <div><span class="k">Based in</span>Jalandhar, India &mdash; working across all time zones</div>
+          </div>
+          <p class="note">Not sure which service you need, or whether computational work is worth it for your target at all? Book the free call. I'd rather talk you out of a bad project than take your money for one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>&copy; 2026 DockAmall &mdash; Kamaldeep Kaur</span>
+    <span>Computational drug discovery services &middot; <a href="mailto:dockk0382@gmail.com">dockk0382@gmail.com</a></span>
+  </div>
+</footer>
+
+<script>
+/* ---- currency switcher ---- */
+(function(){
+  var symbols = {usd:"$", eur:"€", inr:"₹"};
+  var buttons = document.querySelectorAll(".fx button");
+  var prices  = document.querySelectorAll(".price[data-usd]");
+
+  function setCurrency(cur){
+    prices.forEach(function(el){
+      el.textContent = symbols[cur] + el.getAttribute("data-" + cur);
+    });
+    buttons.forEach(function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-cur") === cur ? "true" : "false");
+    });
+    try { localStorage.setItem("dockamall-currency", cur); } catch(e){}
+  }
+
+  buttons.forEach(function(b){
+    b.addEventListener("click", function(){ setCurrency(b.getAttribute("data-cur")); });
+  });
+
+  var saved = "usd";
+  try { saved = localStorage.getItem("dockamall-currency") || "usd"; } catch(e){}
+  if (!symbols[saved]) saved = "usd";
+  setCurrency(saved);
+})();
+
+/* ---- training portal ---- */
+(function(){
+  var dlg = document.getElementById("portal");
+  var open = document.getElementById("open-portal");
+  var close = document.getElementById("close-portal");
+  if (!dlg || !open) return;
+
+  function show(){
+    if (typeof dlg.showModal === "function") { dlg.showModal(); }
+    else { dlg.setAttribute("open", ""); }
+  }
+  open.addEventListener("click", show);
+  if (close) close.addEventListener("click", function(){ dlg.close(); });
+
+  /* click outside the panel closes it */
+  dlg.addEventListener("click", function(e){
+    if (!e.target.closest(".portal-panel")) dlg.close();
+  });
+
+  /* nav link and any #training link opens the portal instead of jumping */
+  document.querySelectorAll('a[href="#training"]').forEach(function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); show(); });
+  });
+})();
+
+/* ---- hero lattice ---- */
+(function(){
+  var canvas = document.getElementById("lattice");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var nodes = [], raf = null, w = 0, h = 0;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function size(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = canvas.getBoundingClientRect();
+    w = r.width; h = r.height;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function build(){
+    var count = Math.max(18, Math.min(46, Math.round(w / 34)));
+    nodes = [];
+    for (var i = 0; i < count; i++){
+      nodes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16,
+        r: Math.random() * 1.6 + 0.9
+      });
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    var link = Math.min(190, w * 0.17);
+    for (var i = 0; i < nodes.length; i++){
+      var a = nodes[i];
+      for (var j = i + 1; j < nodes.length; j++){
+        var b = nodes[j];
+        var dx = a.x - b.x, dy = a.y - b.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < link){
+          ctx.strokeStyle = "rgba(227,161,90," + (0.19 * (1 - d / link)).toFixed(3) + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      ctx.fillStyle = "rgba(227,161,90,0.42)";
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function step(){
+    for (var i = 0; i < nodes.length; i++){
+      var n = nodes[i];
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0 || n.x > w) n.vx *= -1;
+      if (n.y < 0 || n.y > h) n.vy *= -1;
+    }
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  function start(){
+    size(); build(); draw();
+    if (raf) cancelAnimationFrame(raf);
+    if (!reduced) raf = requestAnimationFrame(step);
+  }
+
+  var t = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(t);
+    t = setTimeout(start, 180);
+  });
+  start();
+})();
+</script>
+
+</body>
+</html>
